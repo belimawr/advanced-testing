@@ -1,0 +1,113 @@
+Advanced testing techniques
+Test tip and tricks
+20 Oct 2019
+Tags: foo, bar, baz
+
+Tiago Queiroz
+Principal Backend Engineer, Onefootball
+contato@tiago.eti.br
+https://github.com/belimawr
+@belimawr_
+
+* Mocks
+
+- Fake object used in tests to simulate a specific behaviour and assert if some conditions are met:
+  - Parameters are passed with the correct values
+  - Methods are called/how many times are called
+  - Methods are called in the correct order
+  - etc.
+- Given the *Cache* interface
+
+.code examples/cache/cache.go /START-CACHE OMIT/,/END-CACHE OMIT/
+
+* Mocks
+We can easily implement a mock (*mocks.go*):
+.code examples/cache/mocks.go /START-CACHE-MOCK OMIT/,/END-CACHE-MOCK OMIT/
+
+* Mocks
+And use it:
+.code examples/cache/cache_test.go /START-CACHE-EX1 OMIT/,/END-CACHE-EX1 OMIT/
+
+* Mocks
+We can even do assertions:
+.code examples/cache/cache_test.go /START-CACHE-EX2 OMIT/,/END-CACHE-EX2 OMIT/
+
+* Mocks
+With a small change to our mock we can count function calls:
+.code examples/cache/mocks.go /START-CACHE-MOCK2 OMIT/,/END-CACHE-MOCK2 OMIT/
+
+* Mocks
+Asserting how many times a function was called is easy:
+.code examples/cache/cache_test.go /START-CACHE-EX3 OMIT/,/END-CACHE-EX3 OMIT/
+
+
+
+* Testing basiscs
+
+- Test files end in `_test.go`
+- Test packages have the format: `<package_name>_test` (this is an exception to the "one package per folder")
+- To store test data use the: `testdata`. It is ignored by the go tool
+- Directories and files starting with `.` or `_` are also ignored by the go tool
+- The current directory is always set to the folder where the `*_test.go` file is, not the one you called `go test`
+- Each package is compiled individually and can run concurrently
+# TODO: Check it
+
+* Running tests & cache
+
+* ex01.sh
+
+.code ex01.sh /START OMIT/,/END OMIT/
+
+* Test Cache
+
+- Speeds up development, as you have a faster feedback loop
+- Quite bad if you have intermittent failures
+- Simple to solve (ex02.sh):
+
+.code ex02.sh /START OMIT/,/END OMIT/
+
+* Test failure messages
+
+- First thing we see when the test fails
+- Should provide enough information about *why* the test failed
+- Should provide enough information to *reproduce* *the* *failure*
+- If using a RNG, every test can use a random seed, and in case of failure, log the seed
+: RNG can use random seeds and log the seeds on failures
+: Tests should be as random as possible, as close as possible to prodction environments
+
+*Bad:*
+
+    t.Error("got the worng value")
+
+*Good:*
+
+    // some test code
+    t.Errorf("expecting: 42, got: %d", v)
+
+* Even better
+
+   expected := 42
+   // some testing code
+   v := doStuff()
+   if v != expected {
+     t.Errorf("expecting: %d, got: %d", expected, v) // HL
+   }
+
+* Helper functions (and test data)
+
+.code examples/helper/helper_test.go /START-LoadJSON OMIT/,/END-LoadJSON OMIT/
+.code examples/helper/helper_test.go /START OMIT/,/END OMIT/
+
+  --- FAIL: TestFooBarError (0.00s)
+      helper_test.go:38: open testdata/ok: no such file or directory
+
+
+* A better way
+
+.code examples/helper/helper_test.go /START-LoadJSON2 OMIT/,/END-LoadJSON2 OMIT/
+.code examples/helper/helper_test.go /START2 OMIT/,/END2 OMIT/
+
+* References
+
+- Gophercon UK: Advanced
+- `testdata` directory: https://golang.org/cmd/go/#hdr-Description_of_package_lists
