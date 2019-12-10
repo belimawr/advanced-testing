@@ -40,17 +40,9 @@ With a small change to our mock we can count function calls:
 Asserting how many times a function was called is easy:
 .code examples/cache/cache_test.go /START-CACHE-EX3 OMIT/,/END-CACHE-EX3 OMIT/
 
-
-
-* Testing basiscs
-
-- Test files end in `_test.go`
-- Test packages have the format: `<package_name>_test` (this is an exception to the "one package per folder")
-- To store test data use the: `testdata`. It is ignored by the go tool
-- Directories and files starting with `.` or `_` are also ignored by the go tool
-- The current directory is always set to the folder where the `*_test.go` file is, not the one you called `go test`
-- Each package is compiled individually and can run concurrently
-# TODO: Check it
+* Running tests in parallel
+Golang supports running tests in parallel, all you need is to add `t.Parallel()` to your tests.
+.code examples/concurrency/concurrency_test.go /START OMIT/,/END OMIT/
 
 * Running tests & cache
 
@@ -90,7 +82,7 @@ Asserting how many times a function was called is easy:
    // some testing code
    v := doStuff()
    if v != expected {
-     t.Errorf("expecting: %d, got: %d", expected, v) // HL
+     t.Errorf("expecting: %d, got: %d", expected, v)
    }
 
 * Helper functions (and test data)
@@ -106,6 +98,16 @@ Asserting how many times a function was called is easy:
 
 .code examples/helper/helper_test.go /START-LoadJSON2 OMIT/,/END-LoadJSON2 OMIT/
 .code examples/helper/helper_test.go /START2 OMIT/,/END2 OMIT/
+
+* Testing basiscs
+
+- Test files end in `_test.go`
+- Test packages have the format: `<package_name>_test` (this is an exception to the "one package per folder")
+- To store test data use the: `testdata`. It is ignored by the go tool
+- Directories and files starting with `.` or `_` are also ignored by the go tool
+- The current directory is always set to the folder where the `*_test.go` file is, not the one you called `go test`
+- Each package is compiled individually and can run concurrently
+# TODO: Check it
 
 * References
 
