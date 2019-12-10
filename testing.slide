@@ -10,7 +10,14 @@ https://github.com/belimawr
 @belimawr_
 
 * Who am I?
-- Add something here
+- Brazilian
+- 6+ years of professional experience
+- 3+ years working with golang
+- Worked with different technologies: Golang, Python, Java/Kotlin, C/C++, etc
+- I love Golang
+- I love tests
+- I'm bad at making "who am I slides"
+- And also bad at making jokes
 
 * Agenda
 - Mocks
@@ -59,7 +66,7 @@ For the purpose of this talk, let's stick with a very simplistic definition:
 
 - *Unit*Test:* Any kind of test that depends only on your testing binary (a.k.a.: your code and its dependencies)
 
-- *Integration*Test:* Any kind of thest that has got external dependencies like: databases, APIs, docker, anything external to your testing binary/code.
+- *Integration*Test:* Any kind of test that has got external dependencies like: databases, APIs, docker, anything external to your testing binary/code.
 
 Our goal: using only `go`test`, find a easy way to flag which kind of test we want to run, and do any kind of mix-and-match between them
 
@@ -104,7 +111,7 @@ Golang supports running tests of the same package in parallel, all you need is t
 .code examples/concurrency/concurrency_test.go /START OMIT/,/END OMIT/
 
 * Running tests in parallel
-It also works with subtests:
+It also works with sub-tests:
 .code examples/concurrency/concurrency_test.go /START-TABLE OMIT/,/END-TABLE OMIT/
 
 
@@ -131,11 +138,11 @@ It also works with subtests:
 - Should provide enough information to *reproduce* *the* *failure*
 - If using a RNG, every test can use a random seed, and in case of failure, log the seed
 : RNG can use random seeds and log the seeds on failures
-: Tests should be as random as possible, as close as possible to prodction environments
+: Tests should be as random as possible, as close as possible to production environments
 
 *Bad:*
 
-    t.Error("got the worng value")
+    t.Error("got the wrong value")
 
 *Good:*
 
@@ -182,9 +189,11 @@ It also works with subtests:
 - Redis (in-memory implementation): https://github.com/alicebob/miniredis
 - Test runner with web UI: https://github.com/smartystreets/goconvey
 
-* References
+* References (some of them)
 
-- Gophercon UK: Advanced
-- `testdata` directory: https://golang.org/cmd/go/#hdr-Description_of_package_lists
+- Gophercon UK: Advanced @ https://www.gopherguides.com/
+- https://golang.org/cmd/go/#hdr-Description_of_package_lists
 - http://peter.bourgon.org/go-in-production/#testing-and-validation
 - https://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool
+- https://changelog.com/gotime/101
+- https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859
