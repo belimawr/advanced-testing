@@ -1,13 +1,25 @@
 Advanced testing techniques
-Test tip and tricks
-20 Oct 2019
-Tags: foo, bar, baz
+Tips and tricks for testing
+11 Dec 2019
+Tags: test, mock
 
 Tiago Queiroz
 Principal Backend Engineer, Onefootball
 contato@tiago.eti.br
 https://github.com/belimawr
 @belimawr_
+
+* Who am I?
+- Add something here
+
+* Agenda
+- Mocks
+- Unit x Integration test
+- Concurrent tests
+- Test cache
+- Tips and tricks
+
+* Mocks
 
 * Mocks
 
@@ -40,9 +52,61 @@ With a small change to our mock we can count function calls:
 Asserting how many times a function was called is easy:
 .code examples/cache/cache_test.go /START-CACHE-EX3 OMIT/,/END-CACHE-EX3 OMIT/
 
+* Unit x Integration test
+
+* Unit x Integration test
+For the purpose of this talk, let's stick with a very simplistic definition:
+
+- *Unit*Test:* Any kind of test that depends only on your testing binary (a.k.a.: your code and its dependencies)
+
+- *Integration*Test:* Any kind of thest that has got external dependencies like: databases, APIs, docker, anything external to your testing binary/code.
+
+Our goal: using only `go`test`, find a easy way to flag which kind of test we want to run, and do any kind of mix-and-match between them
+
+* Unit x Integration test
+The solution is simple: *build*tags*!
+
+Normal unit test:
+.code examples/build_flags/unit_test.go
+
+Integration test:
+.code examples/build_flags/integration_test.go
+
+Postgres test:
+.code examples/build_flags/postgres_test.go
+
+* Unit x Integration test, Show me the code!
+
+Normal unit tests:
+
+     go test -v ./...
+
+Integration tests:
+
+     go test -v -tags=integration ./...
+
+Postgres tests:
+
+     go test -v -tags=integration,postgres ./...
+
+Bonus! Only short tests
+
+     go test -v -short ./...
+
+* Unit x Integration test: short tests
+This requires a bit of coding
+.code examples/build_flags/short_test.go
+
 * Running tests in parallel
-Golang supports running tests in parallel, all you need is to add `t.Parallel()` to your tests.
+
+* Running tests in parallel
+Golang supports running tests of the same package in parallel, all you need is to add `t.Parallel()` to your tests.
 .code examples/concurrency/concurrency_test.go /START OMIT/,/END OMIT/
+
+* Running tests in parallel
+It also works with subtests:
+.code examples/concurrency/concurrency_test.go /START-TABLE OMIT/,/END-TABLE OMIT/
+
 
 * Running tests & cache
 
@@ -57,6 +121,8 @@ Golang supports running tests in parallel, all you need is to add `t.Parallel()`
 - Simple to solve (ex02.sh):
 
 .code ex02.sh /START OMIT/,/END OMIT/
+
+* Tips and tricks
 
 * Test failure messages
 
@@ -87,29 +153,38 @@ Golang supports running tests in parallel, all you need is to add `t.Parallel()`
 
 * Helper functions (and test data)
 
-.code examples/helper/helper_test.go /START-LoadJSON OMIT/,/END-LoadJSON OMIT/
-.code examples/helper/helper_test.go /START OMIT/,/END OMIT/
+.code -numbers examples/helper/helper_test.go /START-LoadJSON OMIT/,/END-LoadJSON OMIT/
+.code -numbers examples/helper/helper_test.go /START OMIT/,/END OMIT/
 
   --- FAIL: TestFooBarError (0.00s)
-      helper_test.go:38: open testdata/ok: no such file or directory
+      helper_test.go:52: open testdata/ok: no such file or directory
 
 
 * A better way
 
-.code examples/helper/helper_test.go /START-LoadJSON2 OMIT/,/END-LoadJSON2 OMIT/
-.code examples/helper/helper_test.go /START2 OMIT/,/END2 OMIT/
+.code -numbers examples/helper/helper_test.go /START-LoadJSON2 OMIT/,/END-LoadJSON2 OMIT/
+.code -numbers examples/helper/helper_test.go /START2 OMIT/,/END2 OMIT/
 
-* Testing basiscs
+  --- FAIL: TestFooBarError2 (0.00s)
+  helper_test.go:38: open testdata/ok: no such file or directory
 
-- Test files end in `_test.go`
+* A few more things
+
 - Test packages have the format: `<package_name>_test` (this is an exception to the "one package per folder")
-- To store test data use the: `testdata`. It is ignored by the go tool
+- To store test data use the: `testdata` folder. It is ignored by the go tool
 - Directories and files starting with `.` or `_` are also ignored by the go tool
 - The current directory is always set to the folder where the `*_test.go` file is, not the one you called `go test`
 - Each package is compiled individually and can run concurrently
-# TODO: Check it
+
+* Useful packages for mocking dependencies
+- HTTP: https://golang.org/pkg/net/http/httptest/
+- SQL: https://github.com/DATA-DOG/go-sqlmock
+- Redis (in-memory implementation): https://github.com/alicebob/miniredis
+- Test runner with web UI: https://github.com/smartystreets/goconvey
 
 * References
 
 - Gophercon UK: Advanced
 - `testdata` directory: https://golang.org/cmd/go/#hdr-Description_of_package_lists
+- http://peter.bourgon.org/go-in-production/#testing-and-validation
+- https://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool
