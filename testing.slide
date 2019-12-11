@@ -25,6 +25,7 @@ https://github.com/belimawr
 - Concurrent tests
 - Test cache
 - Tips and tricks
+.image qr_code.png 259 200
 
 * Mocks
 
@@ -187,7 +188,7 @@ It also works with sub-tests:
 - HTTP: https://golang.org/pkg/net/http/httptest/
 - SQL: https://github.com/DATA-DOG/go-sqlmock
 - Redis (in-memory implementation): https://github.com/alicebob/miniredis
-- Test runner with web UI: https://github.com/smartystreets/goconvey
+- Test runner with web UI: https://github.com/smartystreets/goconvey (I only use it to run the tests and see the coverage in the web UI)
 
 * References (some of them)
 
@@ -197,3 +198,7 @@ It also works with sub-tests:
 - https://dave.cheney.net/2013/10/12/how-to-use-conditional-compilation-with-the-go-build-tool
 - https://changelog.com/gotime/101
 - https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859
+
+* Questions?
+
+.image qr_code.png 519 400
